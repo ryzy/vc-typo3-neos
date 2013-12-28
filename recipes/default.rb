@@ -9,4 +9,6 @@
 
 include_recipe "vc-typo3::system"
 include_recipe "vc-typo3::database"
-include_recipe "vc-typo3::webserver"
+include_recipe "vc-typo3::webserver-nginx"
+include_recipe "vc-typo3::webserver-php"
+include_recipe "vc-typo3::webserver-typo3"

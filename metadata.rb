@@ -10,5 +10,7 @@ depends 'build-essential'
 depends 'yum'
 depends 'mysql'
 depends 'database'
-depends 'php', '~> 1.2.0'
-depends 'nginx'
+depends 'nginx'           # https://github.com/opscode-cookbooks/nginx
+depends 'php', '~> 1.2.0' # https://github.com/opscode-cookbooks/php
+depends 'php-fpm'         # https://github.com/yevgenko/cookbook-php-fpm
+depends 'composer'        # https://github.com/escapestudios/chef-composer
