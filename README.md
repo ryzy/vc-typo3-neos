@@ -34,12 +34,14 @@ Later on simply use:
 vagrant up
 ```
 
-Go to [192.168.66.6](http://192.168.66.6/) to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin (user:root, password:password)
+**Go to [192.168.66.6](http://192.168.66.6/)** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin (user:root, password:password)
 
 Add `neos.local` to your `hosts` file:
-```192.168.66.6 neos.local```
+```bash
+192.168.66.6 neos.local
+```
 
-Go to [neos.local](http://neos.local/) to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
+**Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
 
 ## Tips & Tricks
 
