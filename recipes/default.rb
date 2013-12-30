@@ -8,6 +8,7 @@
 #
 
 include_recipe "vc-typo3::system"
+include_recipe "vc-typo3::misc"
 include_recipe "vc-typo3::database"
 include_recipe "vc-typo3::webserver-nginx"
 include_recipe "vc-typo3::webserver-php"

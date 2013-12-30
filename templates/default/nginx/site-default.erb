@@ -4,7 +4,7 @@ server {
   index   index.php index.html;
 
   access_log  <%= node['nginx']['log_dir'] %>/default.access.log;
-  error_log   <%= node['nginx']['log_dir'] %>/default.error.log;
+  error_log   <%= node['nginx']['log_dir'] %>/default.error.log debug;
 
   location ~ \.php$ {
     include       fastcgi_params;

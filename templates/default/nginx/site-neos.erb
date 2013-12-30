@@ -1,0 +1,42 @@
+server {
+  listen          80;
+  server_name     <%= node[:app][:neos][:vhost] %>;
+  root            /var/www/<%= node[:app][:neos][:vhost] %>/Web;
+  index           index.php;
+  
+  access_log      <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.access.log;
+  error_log       <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.error.log;
+  
+  location ~ "^/_Resources/Persistent/" {
+    access_log off;
+    # log_not_found off;
+    expires max;
+    rewrite "(.{40})/.+\.(.+)"                        /_Resources/Persistent/$1.$2 break;
+    rewrite "([a-z0-9]+/(.+/)?[a-f0-9]{40})/.+\.(.+)" /_Resources/Persistent/$1.$2 break;
+  }
+  location ~ "^/_Resources/" {
+    access_log off;
+    # log_not_found off;
+    expires max;
+    break;
+  }
+  
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
+  
+  location ~ \.php$ {
+    include         fastcgi_params;
+    # fastcgi_param   FLOW_CONTEXT        Production;
+    fastcgi_param   FLOW_CONTEXT        Development;
+    fastcgi_param   FLOW_REWRITEURLS    1;
+    fastcgi_pass    php;
+  }
+}
+
+server {
+  listen        80;
+  server_name   www.<%= node[:app][:neos][:vhost] %>;
+  rewrite     ^ http://<%= node[:app][:neos][:vhost] %>$request_uri? permanent;
+  expires max;
+}

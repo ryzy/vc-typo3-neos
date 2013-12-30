@@ -1,16 +1,18 @@
-group node[:app][:group]
+group node[:app][:group] do
+  append true
+  gid 80
+  members 'vagrant'
+end
 
 user node[:app][:user] do
-  group node[:app][:group]
+  uid 80
+  gid 80
   system true
-  shell "/bin/bash"
+  home '/var/www'
+  shell '/bin/bash'
+  supports :manage_home=>false
 end
 
-# Change 'vagrant' user (used to log in by defautl by 'vagrant ssh')
-# so it has 'www-data' group to easily manage 'www-data' files
-user 'vagrant' do
-  group node[:app][:group]
-end
 
 
 #
@@ -21,10 +23,12 @@ include_recipe 'nginx::http_realip_module'
 include_recipe 'nginx::http_gzip_static_module'
 include_recipe 'nginx::http_spdy_module'
 
+template "#{node['nginx']['dir']}/conf.d/upstream_php.conf" do
+  source 'nginx/upstream_php.conf.erb'
+  notifies :reload, 'service[nginx]'
+end
 
-#
 # configure default vhost in /var/www/default
-#
 directory "#{node[:system][:www_root]}/default" do
   owner node[:app][:user]
   group node[:app][:group]
@@ -44,10 +48,7 @@ end
 
 # vhost default
 template "#{node['nginx']['dir']}/sites-available/default" do
-  source 'nginx/site-default.conf.erb'
-  owner  'root'
-  group  'root'
-  mode   '0644'
+  source 'nginx/site-default.erb'
   notifies :reload, 'service[nginx]'
 end
 nginx_site 'default' do
@@ -56,7 +57,7 @@ end
 
 # Put there index.php file
 template "#{node[:system][:www_root]}/default/index.php" do
-  source "nginx/index.php.erb"
+  source "index.php.erb"
   mode   00775
   owner node[:app][:user]
   group node[:app][:group]

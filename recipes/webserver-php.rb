@@ -31,10 +31,14 @@ template "#{node['nginx']['dir']}/conf.d/upstream_php.conf" do
 end
 
 
+
 #
 # PHP Composer
 #
 include_recipe 'composer'
+# make sure composer which is installed globally by default is executable for www-data user (composer recipe doesn't do that)
+execute "chmod -v ugo+rx #{node['composer']['install_dir']}/composer*"
+
 
 
 #

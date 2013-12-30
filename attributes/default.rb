@@ -2,13 +2,15 @@
 default[:system][:packages] = ['mc','htop']
 # PHP: extra packages to install (e.g. php-gd)
 default[:system][:php_packages] = []
-# Root director for www data
+# Root directory for www data
 default[:system][:www_root] = '/var/www'
 # PHP: user/group
 default[:app][:group] = "www-data"
 default[:app][:user] = "www-data"
 # PHP-FPM sock path - see cookbook php-fpm/templates/default/pool.conf.erb
-default[:app][:php_socket] = '/var/run/php-fpm-www.sock' 
+default[:app][:php_socket] = '/var/run/php-fpm-www.sock'
+
+default[:app][:neos][:vhost] = 'neos.local'
 
 
 #
@@ -18,7 +20,7 @@ default['mysql']['tunable']['max_allowed_packet']   = '32M'
 default['mysql']['remove_anonymous_users']          = true
 default['mysql']['remove_test_database']            = true
 default['mysql']['tunable']['character-set-server'] = 'utf8'
-default['mysql']['tunable']['collation-server']     = 'utf8_general_ci'
+default['mysql']['tunable']['collation-server']     = 'utf8_unicode_ci'
 default['mysql']['tunable']['max_connections']      = '50'
 default['mysql']['tunable']['skip-character-set-client-handshake'] = true
 default['mysql']['tunable']['skip-name-resolve']                   = true
