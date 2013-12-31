@@ -1,0 +1,14 @@
+#
+# Some extra tuning options which are not exposed in recipe[mysql]
+#
+[mysqld]
+log_warnings = 2
+general_log = 0
+general_log_file = /var/log/mysql/general.log
+
+table-definition-cache          = 1024
+query-cache-type                = 1
+myisam-sort-buffer-size         = 128M
+
+[client]
+default-character-set           = utf8

@@ -49,7 +49,16 @@ Add `neos.local` to your `hosts` file:
 Start happy coding! If you need, mount `/var/www` to your local filesystem:
 ```
 sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
-```
+
+#### Users / Passwords, security
+
+All passwords (apart of the `root`) are defined in attributes/default.rb:
+
+* **ssh:** root / vagrant
+* **mysql:** root / password (to use e.g. in phpMyAdmin)
+* **mysql:** typo3_neos / password, db name: typo3\_neos (to provide during Neos install process)
+
+You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. Also, there's no iptables running, no firewall setup.
 
 ## Tips & Tricks
 

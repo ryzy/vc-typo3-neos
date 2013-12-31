@@ -9,7 +9,7 @@ version          '0.1.0'
 depends 'build-essential'
 depends 'yum'
 depends 'mysql'
-depends 'database'
+depends 'database'        # https://github.com/opscode-cookbooks/database
 depends 'nginx'           # https://github.com/opscode-cookbooks/nginx
 depends 'php', '~> 1.2.0' # https://github.com/opscode-cookbooks/php
 depends 'php-fpm'         # https://github.com/yevgenko/cookbook-php-fpm
