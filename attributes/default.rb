@@ -10,6 +10,8 @@ default[:app][:group] = "www-data"
 default[:app][:user] = "www-data"
 # PHP-FPM sock path - see cookbook php-fpm/templates/default/pool.conf.erb
 default[:app][:php_socket] = '/var/run/php-fpm-www.sock'
+# COMPOSER_HOME set when executing composer
+default[:app][:composer_home] = "#{node[:system][:www_root]}/.composer"
 # TYPO3 Neos vhost
 default[:app][:neos][:vhost] = 'neos.local'
 

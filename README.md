@@ -3,11 +3,14 @@
 Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisioning.
 
 ##### Features:
-* CentOS 6 based
-* Chef + Berkshelf provisioning
-* MySQL 5.5 / Nginx / PHP 5.5 installed && configured
-* phpMyAdmin
-* TYPO3 Neos installed
+* CentOS 6.5 based
+* Vagrant provisioning is done by Chef + Berkshelf
+* Web environment installed/configured:
+  * MySQL 5.5
+  * Nginx
+  * PHP 5.5
+  * phpMyAdmin
+* TYPO3 Neos installed (into /var/www/neos.local)
 
 ## Requirements
 
@@ -43,25 +46,20 @@ Add `neos.local` to your `hosts` file:
 
 **Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
 
-Mount `/var/www` to your host filesystem:
+Start happy coding! If you need, mount `/var/www` to your local filesystem:
 ```
-sudo mount_nfs -o resvport 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
+sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
 ```
 
 ## Tips & Tricks
 
-##### Mount VM's `/var/www` to your filesystem
+#### Mount VM's `/var/www` to your filesystem
 
 This VM is configured to export `/var/www` via NFS so it's possible to mount it to host's filesystem - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance**, even if you'd use `type:'nfs'` option in your Vagrantfile.
 
 On my setup the difference was ca. 300%: for `ab -n 100 -c 3 http://neos.local/` the performance for uncached request (FLOW_CONTEXT=Development) I had 3 req/s vs. 1req/s when using Vagrant's `synced_folder` with `type:'nfs'`.
 
-You might use more tuned version of `mount_nfs`:
-```bash
-mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
-```
-
 
 ## Author
 
-Author:: ryzy (<marcin@ryzycki.com>)
+Author: ryzy (<marcin@ryzycki.com>)
