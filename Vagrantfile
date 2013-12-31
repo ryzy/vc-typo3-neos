@@ -1,3 +1,4 @@
+Vagrant.require_plugin "vagrant-vbguest"
 Vagrant.require_plugin "vagrant-berkshelf"
 Vagrant.require_plugin "vagrant-omnibus"
 
@@ -16,9 +17,7 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--cpus", "8"]
   end
   
-  config.vm.synced_folder "shared/", "/mnt/shared/", create:true, type: "nfs"
-  config.vbguest.auto_update = true
-  
+  config.vbguest.auto_update = true  
   config.omnibus.chef_version = :latest
   config.berkshelf.enabled = true
   

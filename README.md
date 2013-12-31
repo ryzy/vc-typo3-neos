@@ -43,11 +43,24 @@ Add `neos.local` to your `hosts` file:
 
 **Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
 
+Mount `/var/www` to your host filesystem:
+```
+sudo mount_nfs -o resvport 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
+```
+
 ## Tips & Tricks
 
-1. Because NFS is used to mount host's `shared/` folder inside VM, **you'll be asked for your sudo password** each time VM is up/halt'ed. Add following line to your `visudo` to allow executing Vagrant's NFS-related commands without asking for password:
-    `%admin ALL=(ALL) NOPASSWD:/bin/bash -c echo * /etc/exports, /usr/bin/sed * /etc/exports, /sbin/nfsd restart`
-  Note: TYPO3 Neos uses many files (especially if you leave CVS files) - and according to [some benchamarks](http://docs-v1.vagrantup.com/v1/docs/nfs.html) it's 10..100 times faster than standard synced folders. Therefore using NFS synced folders is advised.
+##### Mount VM's `/var/www` to your filesystem
+
+This VM is configured to export `/var/www` via NFS so it's possible to mount it to host's filesystem - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance**, even if you'd use `type:'nfs'` option in your Vagrantfile.
+
+On my setup the difference was ca. 300%: for `ab -n 100 -c 3 http://neos.local/` the performance for uncached request (FLOW_CONTEXT=Development) I had 3 req/s vs. 1req/s when using Vagrant's `synced_folder` with `type:'nfs'`.
+
+You might use more tuned version of `mount_nfs`:
+```bash
+mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
+```
+
 
 ## Author
 

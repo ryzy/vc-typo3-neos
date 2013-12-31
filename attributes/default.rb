@@ -4,12 +4,13 @@ default[:system][:packages] = ['mc','htop']
 default[:system][:php_packages] = []
 # Root directory for www data
 default[:system][:www_root] = '/var/www'
+
 # PHP: user/group
 default[:app][:group] = "www-data"
 default[:app][:user] = "www-data"
 # PHP-FPM sock path - see cookbook php-fpm/templates/default/pool.conf.erb
 default[:app][:php_socket] = '/var/run/php-fpm-www.sock'
-
+# TYPO3 Neos vhost
 default[:app][:neos][:vhost] = 'neos.local'
 
 

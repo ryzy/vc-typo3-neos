@@ -15,6 +15,3 @@ bin/*
 
 .kitchen/
 .kitchen.local.yml
-
-# your own data
-/shared

@@ -51,3 +51,10 @@ link '/var/www/default/phpMyAdmin' do
  owner node[:app][:user]
  group node[:app][:group]
 end
+
+
+#
+# Fix folders ownership/rights so /var/www is owned/writable by www-data:www-data
+#
+execute "chown -R #{node[:app][:user]}:#{node[:app][:group]} #{node[:system][:www_root]}"
+execute "chmod -R ug+rw #{node[:system][:www_root]}"

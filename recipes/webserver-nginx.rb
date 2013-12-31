@@ -14,6 +14,15 @@ user node[:app][:user] do
 end
 
 
+# /var/www - make sure it exists and has correct permissions
+directory node[:system][:www_root] do
+  owner node[:app][:user]
+  group node[:app][:group]
+  mode 00775
+  recursive true
+  not_if "test -d #{node[:system][:www_root]}"
+end
+
 
 #
 # Nginx
