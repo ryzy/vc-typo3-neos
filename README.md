@@ -49,6 +49,7 @@ Add `neos.local` to your `hosts` file:
 Start happy coding! If you need, mount `/var/www` to your local filesystem:
 ```
 sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
+```
 
 #### Users / Passwords, security
 
