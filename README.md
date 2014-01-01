@@ -56,18 +56,16 @@ sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 19
 All passwords (apart of the `root`) are defined in attributes/default.rb:
 
 * **ssh:** root / vagrant
-* **mysql:** root / password (to use e.g. in phpMyAdmin)
-* **mysql:** typo3_neos / password, db name: typo3\_neos (to provide during Neos install process)
+* **mysql:** root / password
+* **mysql:** typo3_neos / password, db name: typo3\_neos
 
-You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. Also, there's no iptables running, no firewall setup.
+You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
 ## Tips & Tricks
 
 #### Mount VM's `/var/www` to your filesystem
 
-This VM is configured to export `/var/www` via NFS so it's possible to mount it to host's filesystem - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance**, even if you'd use `type:'nfs'` option in your Vagrantfile.
-
-On my setup the difference was ca. 300%: for `ab -n 100 -c 3 http://neos.local/` the performance for uncached request (FLOW_CONTEXT=Development) I had 3 req/s vs. 1req/s when using Vagrant's `synced_folder` with `type:'nfs'`.
+This VM is configured to export `/var/www` via NFS so you can easily mount it to your filesystem - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance** even if you'd use it with `type:'nfs'` option. Quick tests with `ab` for default TYPO3 Neos installation for its home page show ca. 300% difference (in comparison to synced\_folder with type:'nfs'). It makes huge difference when working with TYPO3 in FLOW_CONTEXT=Development, with uncached requests (i.e. 300..1000ms instead of 1000..3000ms).
 
 
 ## Author

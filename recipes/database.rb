@@ -1,11 +1,18 @@
+#
+# MySQL server
+#
 include_recipe "mysql::server"
-include_recipe "database::mysql"
 
-# extra config
+# MySQL extra config
 template "#{node['mysql']['server']['directories']['confd_dir']}/extra.cnf" do
   source 'mysql-extra.cnf.erb'
-  notifies :reload, 'service[mysql]', :immediately
 end
+
+
+#
+# MySQL databases
+#
+include_recipe "database::mysql"
 
 # define mysql connection parameters
 mysql_connection_info = {
