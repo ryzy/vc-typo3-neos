@@ -12,11 +12,20 @@ default[:app][:user] = "www-data"
 default[:app][:php_socket] = '/var/run/php-fpm-www.sock'
 # COMPOSER_HOME set when executing composer
 default[:app][:composer_home] = "#{node[:system][:www_root]}/.composer"
+
+# DB user for TYPO3 apps
+default[:app][:db_user] = 'typo3'
+default[:app][:db_pass] = 'password'
+
+# TYPO3 CMS
+default[:app][:typo3][:vhost]   = 'typo3.local'
+default[:app][:typo3][:db_name] = "#{node[:app][:db_user]}_cms"
 # TYPO3 Neos
-default[:app][:neos][:vhost] = 'neos.local'
-default[:app][:neos][:db_user] = 'typo3_neos'
-default[:app][:neos][:db_name] = 'typo3_neos'
-default[:app][:neos][:db_pass] = 'password'
+default[:app][:neos][:vhost]    = 'neos.local'
+default[:app][:neos][:db_name]  = "#{node[:app][:db_user]}_neos" # typo3_neos
+# TYPO3 Flow
+default[:app][:flow][:vhost]    = 'flow.local'
+default[:app][:flow][:db_name]  = "#{node[:app][:db_user]}_flow" # typo3_flow
 
 
 #

@@ -7,8 +7,8 @@ Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisionin
 * Vagrant provisioning is done by Chef + Berkshelf
 * Web environment installed/configured:
   * MySQL 5.5
-  * Nginx
-  * PHP 5.5
+  * Nginx (latest 1.4.x)
+  * PHP (latest 5.5.x)
   * phpMyAdmin
 * TYPO3 Neos installed (into /var/www/neos.local)
 
