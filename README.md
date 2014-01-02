@@ -50,6 +50,7 @@ Start happy coding! If you need, mount `/var/www` to your local filesystem:
 ```
 sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
 ```
+Or simply run `./mount-vm.sh`
 
 #### Users / Passwords, security
 
@@ -57,7 +58,7 @@ All passwords (apart of the `root`) are defined in attributes/default.rb:
 
 * **ssh:** root / vagrant
 * **mysql:** root / password
-* **mysql:** typo3_neos / password, db name: typo3\_neos
+* **mysql:** typo3 / password, db name(s): typo3\_neos, typo3\_cms, typo3\_flow
 
 You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
