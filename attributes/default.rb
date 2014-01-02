@@ -1,7 +1,5 @@
 # System: extra packages to install initially
 default[:system][:packages] = ['mc','htop']
-# PHP: extra packages to install (e.g. php-gd)
-default[:system][:php_packages] = []
 # Root directory for www data
 default[:system][:www_root] = '/var/www'
 
@@ -62,6 +60,9 @@ default['mysql']['server_debian_password'] = node['mysql']['server_root_password
 #
 # PHP settings
 #
+# PHP: extra packages/modules to install
+default[:system][:php_packages] = ['php-opcache']
+# PHP tuning
 default['php']['fpm_user']      = node[:app][:user]
 default['php']['fpm_group']     = node[:app][:group]
 default['php']['directives'] = { # extra directives added to the end of php.ini
@@ -102,3 +103,4 @@ default['nginx']['group']                 = node[:app][:group]
 default['nginx']['default_site_enabled']  = false
 default['nginx']['worker_processes']      = 2
 default['nginx']['realip']['addresses']   = ['0.0.0.0/32']
+default['nginx']['client_max_body_size'] = '99M'

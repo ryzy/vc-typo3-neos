@@ -32,9 +32,12 @@ include_recipe 'nginx::http_realip_module'
 include_recipe 'nginx::http_gzip_static_module'
 include_recipe 'nginx::http_spdy_module'
 
-template "#{node['nginx']['dir']}/conf.d/upstream_php.conf" do
-  source 'nginx/upstream_php.conf.erb'
-  notifies :reload, 'service[nginx]'
+# prepare generic configs to include inside vhost configurations
+%w{ common security static }.each do |conf|
+  template "#{node['nginx']['dir']}/include-#{conf}.conf" do
+    source "nginx/include-#{conf}.conf.erb"
+    notifies :reload, 'service[nginx]'
+  end
 end
 
 # configure default vhost in /var/www/default
@@ -62,6 +65,7 @@ template "#{node['nginx']['dir']}/sites-available/default" do
 end
 nginx_site 'default' do
   enable true
+  notifies :reload, 'service[nginx]', :immediately
 end
 
 # Put there index.php file

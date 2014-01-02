@@ -1,0 +1,9 @@
+# static content:
+# - images
+# - flash
+# - fonts
+# - css/js
+location ~* \.(?:jpg|jpeg|gif|png|ico|swf|svg|eot|ttf|otf|woff|css|js)$ {
+  access_log off;
+  expires max;
+}

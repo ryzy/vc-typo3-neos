@@ -6,34 +6,32 @@ server {
   
   access_log      <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.access.log;
   error_log       <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.error.log;
+    
+  location / {
+    try_files $uri /index.php?$args;
+  }
   
   location ~ "^/_Resources/Persistent/" {
     access_log off;
-    # log_not_found off;
     expires max;
     rewrite "(.{40})/.+\.(.+)"                        /_Resources/Persistent/$1.$2 break;
     rewrite "([a-z0-9]+/(.+/)?[a-f0-9]{40})/.+\.(.+)" /_Resources/Persistent/$1.$2 break;
   }
-  location ~ "^/_Resources/" {
-    access_log off;
-    # log_not_found off;
-    expires max;
-    break;
-  }
-  
-  location / {
-    try_files $uri $uri/ /index.php?$args;
-  }
   
   location ~ \.php$ {
     include         fastcgi_params;
-    # fastcgi_param   FLOW_CONTEXT        Production;
-    fastcgi_param   FLOW_CONTEXT        Development;
+    fastcgi_param   FLOW_CONTEXT        Development; # Development|Production
     fastcgi_param   FLOW_REWRITEURLS    1;
-    fastcgi_pass    php;
+    fastcgi_pass    upstream-php;
   }
+  
+  include include-security.conf;
+  include include-common.conf;
+  include include-static.conf;
 }
 
+# Redirect from www. host to non-www
+# Note: we do not use any IF conditions inside main host configuration due to performance reasons
 server {
   listen        80;
   server_name   www.<%= node[:app][:neos][:vhost] %>;

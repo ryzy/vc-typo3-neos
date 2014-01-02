@@ -8,6 +8,6 @@ server {
 
   location ~ \.php$ {
     include       fastcgi_params;
-    fastcgi_pass  php;      
+    fastcgi_pass  upstream-php;
   }
 }

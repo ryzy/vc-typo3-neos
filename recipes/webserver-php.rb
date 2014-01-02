@@ -12,7 +12,15 @@ include_recipe 'php-fpm'
 # Make sure /var/lib/php (where PHP stores sessions by default) has correct ownership
 execute "chown -R #{node[:app][:user]}:#{node[:app][:group]} /var/lib/php* /var/log/php*"
 
-# Override default fastcgi_params with more tuned version
+# Extra config(s)
+%w{ opcache-typo3.blacklist zz-opcache-overrides.ini zz-overrides.ini }.each do |conf|
+  template "#{node['php']['ext_conf_dir']}/#{conf}" do
+    source "php/#{conf}.erb"
+    notifies :reload, 'service[php-fpm]'
+  end
+end
+
+# Nginx: override default fastcgi_params with more tuned version
 template "#{node[:nginx][:dir]}/fastcgi_params" do
   source 'nginx/fastcgi_params'
   owner  'root'
@@ -21,7 +29,7 @@ template "#{node[:nginx][:dir]}/fastcgi_params" do
   notifies :reload, 'service[nginx]'
 end
 
-# Define upstream php which can be used in vhost configurations
+# Nginx: define upstream php which can be used in vhost configurations
 template "#{node['nginx']['dir']}/conf.d/upstream_php.conf" do
   source 'nginx/upstream_php.conf.erb'
   owner  'root'
