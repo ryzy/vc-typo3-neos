@@ -1,11 +1,11 @@
 server {
   listen          80;
-  server_name     <%= node[:app][:neos][:vhost] %>;
-  root            /var/www/<%= node[:app][:neos][:vhost] %>/Web;
+  server_name     <%= @vhost_name %>;
+  root            /var/www/<%= @vhost_name %>/Web;
   index           index.php;
   
-  access_log      <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.access.log;
-  error_log       <%= node['nginx']['log_dir'] %>/<%= node[:app][:neos][:vhost] %>.error.log;
+  access_log      <%= node['nginx']['log_dir'] %>/<%= @vhost_name %>.access.log;
+  error_log       <%= node['nginx']['log_dir'] %>/<%= @vhost_name %>.error.log;
     
   location / {
     try_files $uri /index.php?$args;
@@ -30,11 +30,10 @@ server {
   include include-static.conf;
 }
 
-# Redirect from www. host to non-www
-# Note: we do not use any IF conditions inside main host configuration due to performance reasons
+# Redirect from www. prefixed host to non-www variant
 server {
   listen        80;
-  server_name   www.<%= node[:app][:neos][:vhost] %>;
-  rewrite     ^ http://<%= node[:app][:neos][:vhost] %>$request_uri? permanent;
+  server_name   www.<%= @vhost_name %>;
+  rewrite     ^ http://<%= @vhost_name %>$request_uri? permanent;
   expires max;
 }

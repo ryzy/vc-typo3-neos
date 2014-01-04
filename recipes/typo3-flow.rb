@@ -1,8 +1,8 @@
-vhost_name = node[:app][:neos][:vhost]
+vhost_name = node[:app][:flow][:vhost]
 vhost_dir = "#{node[:system][:www_root]}/#{vhost_name}"
 
 #
-# TYPO3 Neos vhost
+# TYPO3 Flow vhost
 #
 template "#{node['nginx']['dir']}/sites-available/#{vhost_name}" do
   source 'nginx/site-typo3.erb'
@@ -15,14 +15,14 @@ nginx_site vhost_name
 
 
 #
-# Install TYPO3 Neos
+# Install TYPO3 Flow
 #
-execute "composer --no-interaction --no-progress --dev create-project typo3/neos-base-distribution #{vhost_name}" do
+execute "composer --no-interaction --no-progress --keep-vcs --dev create-project typo3/flow-base-distribution #{vhost_name}" do
   cwd node[:system][:www_root]
   user node[:app][:user]
   group node[:app][:group]
   environment ({
-    :COMPOSER_HOME => node[:system][:composer_home]
+      :COMPOSER_HOME => node[:system][:composer_home]
   })
   not_if "test -d #{vhost_dir}"
 end
@@ -32,7 +32,7 @@ execute "./flow core:setfilepermissions vagrant #{node[:app][:user]} #{node[:app
   only_if "test -d #{vhost_dir}"
 end
 
-execute 'TYPO3 Neos post-installation' do
+execute 'TYPO3 Flow post-installation' do
   cwd vhost_dir
   command '
     ./flow cache:warmup;

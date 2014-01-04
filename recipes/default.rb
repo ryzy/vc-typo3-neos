@@ -11,4 +11,5 @@ include_recipe 'vc-typo3::nfs'              # NFS exports
 include_recipe 'vc-typo3::web-db'           # Web: MySQL
 include_recipe 'vc-typo3::web-nginx'        # Web: Nginx server
 include_recipe 'vc-typo3::web-php'          # Web: PHP, PHP-FPM, composer, phpMyAdmin
+include_recipe 'vc-typo3::typo3-flow'       # TYPO3 Flow installation
 include_recipe 'vc-typo3::typo3-neos'       # TYPO3 Neos installation
