@@ -10,7 +10,8 @@ Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisionin
   * Nginx (latest 1.4.x)
   * PHP (latest 5.5.x)
   * phpMyAdmin
-* TYPO3 Neos installed (into /var/www/neos.local)
+* TYPO3 Flow pre-installed (into /var/www/flow.local)
+* TYPO3 Neos pre-installed (into /var/www/neos.local)
 
 ## Requirements
 
@@ -43,10 +44,12 @@ Add `neos.local` to your `hosts` file:
 ```bash
 192.168.66.6 neos.local
 ```
-
+**Go to [flow.local](http://flow.local/)** to see TYPO3 Flow page.
 **Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
 
-Start happy coding! If you need, mount `/var/www` to your local filesystem:
+And start happy coding!
+
+Root folder to all Nginx vhosts is `/var/www` and it's exported via NFS, ready to mount to your filesystem. You can mount it using:
 ```
 sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
 ```
@@ -58,7 +61,7 @@ All passwords (apart of the `root`) are defined in attributes/default.rb:
 
 * **ssh:** root / vagrant
 * **mysql:** root / password
-* **mysql:** typo3 / password, db name(s): typo3\_neos, typo3\_cms, typo3\_flow
+* **mysql:** typo3 / password, db name(s): typo3\_neos, typo3\_flow, typo3\_cms
 
 You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
