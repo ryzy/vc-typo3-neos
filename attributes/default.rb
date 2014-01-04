@@ -2,14 +2,14 @@
 default[:system][:packages] = ['mc','htop']
 # Root directory for www data
 default[:system][:www_root] = '/var/www'
+# COMPOSER_HOME set when executing composer
+default[:system][:composer_home] = "#{node[:system][:www_root]}/.composer"
 
 # PHP: user/group
 default[:app][:group] = "www-data"
 default[:app][:user] = "www-data"
 # PHP-FPM sock path - see cookbook php-fpm/templates/default/pool.conf.erb
 default[:app][:php_socket] = '/var/run/php-fpm-www.sock'
-# COMPOSER_HOME set when executing composer
-default[:app][:composer_home] = "#{node[:system][:www_root]}/.composer"
 
 # DB user for TYPO3 apps
 default[:app][:db_user] = 'typo3'

@@ -51,7 +51,7 @@ execute "chmod -v ugo+rx #{node['composer']['install_dir']}/composer*"
 # make sure COMPOSER_HOME directory exist
 # COMPOSER_HOME needs to be also set before each call of composer
 # which fixes the bug *The "/root/.composer/cache/files/" directory does not exist.*
-directory node[:app][:composer_home] do
+directory node[:system][:composer_home] do
   owner node[:app][:user]
   group node[:app][:group]
   mode 00775
