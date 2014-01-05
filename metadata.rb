@@ -4,7 +4,7 @@ maintainer_email 'marcin@ryzycki.com'
 license          'All rights reserved'
 description      'Installs/Configures vc-typo3'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.1.0'
+version          '0.9.0'
 
 depends 'yum'             # https://github.com/opscode-cookbooks/yum
 depends 'mysql'           # https://github.com/opscode-cookbooks/mysql
