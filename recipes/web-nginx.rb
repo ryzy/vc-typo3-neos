@@ -13,6 +13,11 @@ user node[:app][:user] do
   supports :manage_home=>false
 end
 
+user 'vagrant' do
+  gid 80
+  action :manage
+end
+
 
 # /var/www - make sure it exists and has correct permissions
 directory node[:system][:www_root] do
