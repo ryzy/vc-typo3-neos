@@ -27,17 +27,25 @@ execute "composer --no-interaction --no-progress --dev create-project typo3/neos
   not_if "test -d #{vhost_dir}"
 end
 
-execute "./flow core:setfilepermissions vagrant #{node[:app][:user]} #{node[:app][:group]}" do
-  cwd vhost_dir
-  only_if "test -d #{vhost_dir}"
+settings_yaml = "#{vhost_dir}/Configuration/Settings.yaml"
+template settings_yaml do
+  source 'typo3/Settings.yaml.erb'
+  variables({
+      :db_name => node[:app][:neos][:db_name],
+      :db_user => node[:app][:db_user],
+      :db_pass => node[:app][:db_pass],
+      :db_host => node[:app][:db_host]
+  })
+  not_if "test -f #{settings_yaml}"
 end
 
-execute 'TYPO3 Neos post-installation' do
+execute 'TYPO3 Flow post-installation' do
   cwd vhost_dir
-  command '
+  command "
+    sudo ./flow core:setfilepermissions vagrant #{node[:app][:user]} #{node[:app][:group]};
+    sudo chown -R #{node[:app][:user]}:#{node[:app][:group]} #{vhost_dir};
     ./flow cache:warmup;
-  '
-  cwd vhost_dir
+  "
   user node[:app][:user]
   group node[:app][:group]
 end
