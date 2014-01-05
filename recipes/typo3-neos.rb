@@ -36,6 +36,8 @@ template settings_yaml do
       :db_pass => node[:app][:db_pass],
       :db_host => node[:app][:db_host]
   })
+  user node[:app][:user]
+  group node[:app][:group]
   not_if "test -f #{settings_yaml}"
 end
 
