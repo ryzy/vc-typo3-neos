@@ -17,7 +17,7 @@ nginx_site vhost_name
 #
 # Install TYPO3 Flow
 #
-execute "composer --no-interaction --no-progress --keep-vcs --dev create-project typo3/flow-base-distribution #{vhost_name}" do
+execute "composer --no-interaction --no-progress --dev create-project typo3/flow-base-distribution #{vhost_name}" do
   cwd node[:system][:www_root]
   user node[:app][:user]
   group node[:app][:group]

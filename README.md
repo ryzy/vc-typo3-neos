@@ -2,22 +2,25 @@
 
 Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisioning.
 
-##### Features:
-* CentOS 6.5 based
-* Vagrant provisioning is done by Chef + Berkshelf
+##### Features
+
+To make sure this VM setup suits TYPO3 Flow/Neos development, the following are included in the setup:
+
+* machine is CentOS 6.5 based
+* Vagrant provisioning is done by [Chef](http://www.getchef.com/chef/)(solo) + [Berkshelf](http://berkshelf.com/)
 * Web environment installed/configured:
-  * MySQL 5.5
+  * MySQL 5.5 (+tuning)
   * Nginx (latest 1.4.x)
   * PHP (latest 5.5.x)
-  * phpMyAdmin
-* TYPO3 Flow pre-installed (into /var/www/flow.local)
+  * phpMyAdmin installed
+* TYPO3 Flow installed (into /var/www/flow.local)
 * TYPO3 Neos pre-installed (into /var/www/neos.local)
 
 ## Requirements
 
 1. Install [Vagrant](http://www.vagrantup.com/)
 2. Install [VirtualBox](https://www.virtualbox.org/)
-3. Make sure you use Ruby 1.9.x or 2.x.
+3. Make sure you have Ruby 1.9.x or 2.x.
   Note: you might follow this article on [how to install different version of Ruby using RVM](http://misheska.com/blog/2013/06/16/using-rvm-to-manage-multiple-versions-of-ruby/)).
 4. Make sure you have Ruby Bundler installed:
   ```[sudo] gem install bundler```
@@ -37,19 +40,20 @@ Later on simply use:
 ```bash
 vagrant up
 ```
+If vagrant up fails and it's due to some temporary reason, try 'vagrant provision' after machine was booted. Or file a ticket / pull request so it can be resolved permanently in the future version.
 
 **Go to [192.168.66.6](http://192.168.66.6/)** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin (user:root, password:password)
 
-Add `neos.local` to your `hosts` file:
+Map **flow.local**, **neos.local** to your `hosts` file:
 ```bash
-192.168.66.6 neos.local
+192.168.66.6 flow.local neos.local
 ```
 **Go to [flow.local](http://flow.local/)** to see TYPO3 Flow page.
 **Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
 
 And start happy coding!
 
-Root folder to all Nginx vhosts is `/var/www` and it's exported via NFS, ready to mount to your filesystem. You can mount it using:
+The web root folder to all Nginx vhosts is `/var/www` and it's exported via NFS, ready to mount to your filesystem. You can mount it using:
 ```
 sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
 ```
