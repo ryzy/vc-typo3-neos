@@ -4,6 +4,12 @@ default[:system][:packages] = ['mc','htop']
 default[:system][:www_root] = '/var/www'
 # COMPOSER_HOME set when executing composer
 default[:system][:composer_home] = "#{node[:system][:www_root]}/.composer"
+# COMPOSER_PROCESS_TIMEOUT: sometimes it takes a while, so make it longer then def. 300
+default[:system][:composer_timeout] = '900' # Passed to env variables and must be string - otherwise Chef/Ruby triggers error
+default[:system][:composer_env] = {
+  'COMPOSER_HOME'             => node[:system][:composer_home],
+  'COMPOSER_PROCESS_TIMEOUT'  => node[:system][:composer_timeout]
+}
 
 # PHP: user/group
 default[:app][:group] = "www-data"

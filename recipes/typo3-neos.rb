@@ -21,9 +21,7 @@ execute "composer --no-interaction --no-progress --dev create-project typo3/neos
   cwd node[:system][:www_root]
   user node[:app][:user]
   group node[:app][:group]
-  environment ({
-      'COMPOSER_HOME' => node[:system][:composer_home]
-  })
+  environment (node[:system][:composer_env])
   not_if "test -d #{vhost_dir}"
 end
 
