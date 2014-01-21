@@ -1,5 +1,5 @@
 # System: extra packages to install initially
-default[:system][:packages] = ['mc','htop']
+default[:system][:packages] = ['git','mc','htop']
 # Root directory for www data
 default[:system][:www_root] = '/var/www'
 # COMPOSER_HOME set when executing composer
