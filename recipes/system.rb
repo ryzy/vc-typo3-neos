@@ -46,7 +46,8 @@ r =  execute "yum clean all; yum update -y" do
 end
 r.run_action(:run)
 
-
+# Install development tools using yum groupinstall
+execute "yum groupinstall -y 'Development tools'"
 
 # Install extra packages (user software etc)
 node[:system][:packages].each do |pkg|
