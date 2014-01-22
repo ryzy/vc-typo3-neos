@@ -4,14 +4,13 @@ Vagrant.require_plugin "vagrant-omnibus"
 
 Vagrant.configure("2") do |config|
   config.vm.hostname = "vc-typo3"
+  config.ssh.username = 'vagrant'
   
   config.vm.box = "opscode-centos-6.5"
   config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box"
   
   config.vm.boot_timeout = 120
   config.vm.network :private_network, ip: '192.168.66.6'
-  
-  config.ssh.username = 'vagrant'
   
   config.vm.provider :virtualbox do |vb|
     vb.gui = false
@@ -27,7 +26,7 @@ Vagrant.configure("2") do |config|
     provider.api_key = 'xxxx'
     provider.region = 'Amsterdam 2'
     provider.image = 'CentOS 6.4 x64'
-    provider.size = '2GB'
+    provider.size = '1GB'
   end
   
   config.vbguest.auto_update = true  
