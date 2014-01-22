@@ -6,6 +6,7 @@ description      'Installs/Configures vc-typo3'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.0.0'
 
+depends 'swap'            # https://github.com/sethvargo-cookbooks/swap
 depends 'yum'             # https://github.com/opscode-cookbooks/yum
 depends 'mysql'           # https://github.com/opscode-cookbooks/mysql
 depends 'database'        # https://github.com/opscode-cookbooks/database
