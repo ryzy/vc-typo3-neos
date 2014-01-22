@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     provider.api_key = 'xxxx'
     provider.region = 'Amsterdam 2'
     provider.image = 'CentOS 6.4 x64'
-    provider.size = '1GB'
+    provider.size = '2GB' # and 2vCPU
   end
   
   config.vbguest.auto_update = true  
