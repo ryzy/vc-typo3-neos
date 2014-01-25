@@ -67,15 +67,13 @@ You can connect to MySQL from outside VM machine as user _root_ is added with '%
 
 ## Deploying to DigitalOcean
 
-In the separate branch [digital-ocean](https://github.com/ryzy/vc-typo3/tree/digital-ocean) of this repo, you'll find Vagrant file configured to deploy this setup to [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f)
+This part describes how to deploy this setup to [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f). After `vagrant up --provider=digital_ocean` you'll have up & running droplet there, provisioned and ready to use, as you'd have it locally.
+
+Detailed instruction and config options are available on [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean) plugin page. Below is the short version.
 
 #### Usage
 
-Detailed instruction and config options are available on [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean) plugin page. 
-
-Short version:
-
-1.  Provide your Client ID and API key (grab them from DigitalOcean Control Panel, API section) into `provider.client_id` and `provider.api_key` respectively.
+1.  Provide your Client ID and API key (grab them from DigitalOcean Control Panel, API section) into Vagrant file options, `provider.client_id` and `provider.api_key` respectively.
 
 2.  Optionally configure other parameters, like size, region etc.
 
