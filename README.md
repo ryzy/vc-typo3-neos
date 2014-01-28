@@ -15,6 +15,7 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
   * phpMyAdmin installed
 * TYPO3 Flow installed (into /var/www/flow.local)
 * TYPO3 Neos pre-installed (into /var/www/neos.local)
+* Configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f)
 
 ## Requirements
 
@@ -59,13 +60,29 @@ You'll probably download/upload files via SFTP, mapping your local project paths
 
 All passwords (apart of the `root`) are defined in attributes/default.rb:
 
-* **ssh:** root / vagrant
-* **mysql:** root / password
-* **mysql:** typo3 / password, db name(s): typo3\_neos, typo3\_flow, typo3\_cms
+* **ssh:** user: root, passw: `vagrant`
+* **ssh:** user: vagrant, passw: `vagrant`
+* **mysql:** user: root, passw: `password`
+* **mysql:** user: typo3, passw: `password`
+  * database name(s): `typo3_neos`, `typo3_flow`, `typo3_cms`
 
 You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
-## Deploying to DigitalOcean
+
+## Provider: Parallels Desktop
+
+Why bother, if VirtualBox is so cool, free and there's plenty of ready to use image boxes? Well, look up some [benchmarks](http://www.macobserver.com/tmo/article/benchmarking-parallels-fusion-and-virtualbox-against-boot-camp) - I'm sure you'll appreciate 3-digit % difference in performance (e.g. during my tests on the same machine, Neos back-end loaded in 800..1000ms (VB) vs 300..500ms (PD9). Values for Development environment).
+
+#### Usage
+
+* You will need Parallels Desktop compatible box.
+  * You can use my box (link configured in Vagrantfile in :parallels provider section) or build your own using [veewee](https://github.com/jedi4ever/veewee) or [packer.io](http://www.packer.io/).
+  * Note: the provided box is on Google Drive, which forbids directs downloads and uses redirests - Vagrant might not like it and you'll probably have to download it manually (via browser) and add `vagrant box add centos-6.5-x86_64-minimal ~/Downloads/centos-6.5-x86_64-minimal.box`
+* `vagrant plugin install vagrant-parallels`
+* `vagrant up --provider=parallels`
+* Optionally, add line with `export VAGRANT_DEFAULT_PROVIDER=parallels` to your .bash_profile to use this provider as default.
+
+## Provider: DigitalOcean
 
 This part describes how to deploy this setup to [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f). After `vagrant up --provider=digital_ocean` you'll have up & running droplet there, provisioned and ready to use, as you'd have it locally.
 
@@ -99,6 +116,10 @@ sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 19
 Or simply run `./mount-vm.sh`
 
 Ergo you mount VM's filesystem to your host machine - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance** even if you'd use it with `type:'nfs'` option. Quick tests with `ab` for default TYPO3 Neos installation for its home page show ca. 300% difference (in comparison to synced\_folder with type:'nfs'). It makes huge difference when working with TYPO3 in FLOW_CONTEXT=Development, with uncached requests (i.e. 300..1000ms instead of 1000..3000ms).
+
+#### Change default provider
+
+Add e.g. `export VAGRANT_DEFAULT_PROVIDER=parallels` to your `.bash_profile`
 
 
 ## Author

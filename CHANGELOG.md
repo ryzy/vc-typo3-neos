@@ -1,8 +1,19 @@
+## 1.2.0 (2014-01-28)
+
+Features:
+
+- Parallels Desktop provider support + README
+- general Vagrant file tidying up
+
+Bugfixes:
+
+- Default config.vm.network :private_network changed to "10.11.12.13" as Parallels Desktop provider didn't like the previous value and triggered error
+
 ## 1.1.0 (2014-01-25)
 
 Features:
 
-- DigitalOcean.com support + documentation
+- DigitalOcean.com provider support + README
 
 Bugfixes:
 
