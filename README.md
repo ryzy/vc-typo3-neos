@@ -75,9 +75,9 @@ Why bother, if VirtualBox is so cool, free and there's plenty of ready to use im
 
 #### Usage
 
-* You will need Parallels Desktop compatible box.
-  * You can use my box (link configured in Vagrantfile in :parallels provider section) or build your own using [veewee](https://github.com/jedi4ever/veewee) or [packer.io](http://www.packer.io/).
-  * Note: the provided box is on Google Drive, which forbids directs downloads and uses redirests - Vagrant might not like it and you'll probably have to download it manually (via browser) and add `vagrant box add centos-6.5-x86_64-minimal ~/Downloads/centos-6.5-x86_64-minimal.box`
+* You will need Parallels Desktop compatible box. You'll also need to install [vagrant-parallels](https://github.com/Parallels/vagrant-parallels) provider.
+  * You can use my box (link configured in Vagrantfile in :parallels provider section) or build your own using [veewee](https://github.com/jedi4ever/veewee) or [packer.io](http://www.packer.io/). You can use my CentOS 6 template for veewee from [here](https://github.com/ryzy/veewee-centos6).
+  * Note: prepared by me Parallels box is on Google Drive, which forbids directs downloads and uses redirests - Vagrant can't handle it and you have to download it manually (via browser) and add `vagrant box add centos-6.5-x86_64-minimal ~/Downloads/centos-6.5-x86_64-minimal.box`. You'll find the link in Vagrantfile, in `vm.box_url` line in :parallels config section.
 * `vagrant plugin install vagrant-parallels`
 * `vagrant up --provider=parallels`
 * Optionally, add line with `export VAGRANT_DEFAULT_PROVIDER=parallels` to your .bash_profile to use this provider as default.
