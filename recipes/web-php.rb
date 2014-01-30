@@ -7,6 +7,18 @@ node[:system][:php_packages].each do |pkg|
   package pkg
 end
 
+# update the main pear channel
+php_pear_channel 'pear.php.net' do
+  action :update
+end
+# update the main pecl channel
+php_pear_channel 'pecl.php.net' do
+  action :update
+end
+
+#
+# PHP-FPM
+#
 include_recipe 'php-fpm'
 
 # Make sure /var/lib/php (where PHP stores sessions by default) has correct ownership

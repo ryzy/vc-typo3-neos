@@ -68,7 +68,7 @@ default['mysql']['server_debian_password'] = node['mysql']['server_root_password
 # PHP settings
 #
 # PHP: extra packages/modules to install
-default[:system][:php_packages] = ['php-opcache']
+default[:system][:php_packages] = ['php-opcache','php-pecl-gmagick']
 # PHP tuning
 default['php']['fpm_user']      = node[:app][:user]
 default['php']['fpm_group']     = node[:app][:group]
