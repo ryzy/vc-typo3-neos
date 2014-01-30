@@ -1,3 +1,13 @@
+## 1.3.0 (2014-01-30)
+
+Features:
+
+- RVM installed in the system, with default Ruby 2.0.0
+
+Bugfixes:
+
+- Default config.vm.network :private_network removed from global configuration as it might cause problems in other then VirtualBox providers. Thus overriden only for VB provider.
+
 ## 1.2.0 (2014-01-28)
 
 Features:
