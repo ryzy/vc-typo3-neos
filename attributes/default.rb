@@ -122,8 +122,3 @@ default['rvm']['user_default_ruby'] = node['rvm']['default_ruby']
 
 default['rvm']['vagrant']['system_chef_client'] = '/opt/chef/bin/chef-client'
 default['rvm']['vagrant']['system_chef_solo'] = '/opt/chef/bin/chef-solo'
-default['rvm']['global_gems'] = [
-  { 'name'    => 'sass',      'version' => '3.3.0.rc.2'     },
-  { 'name'    => 'compass',   'version' => '1.0.0.alpha.17' }
-]
-#default['rvm']['user_gems'] = node['rvm']['global_gems']
