@@ -7,6 +7,7 @@
 
 include_recipe 'vc-typo3::system'           # system basic setup (repos, tweaks)
 include_recipe 'vc-typo3::nfs'              # NFS exports
+include_recipe 'vc-typo3::web-tools'        # Web tools: ruby, sass, compass etc
 include_recipe 'vc-typo3::web-db'           # Web: MySQL
 include_recipe 'vc-typo3::web-nginx'        # Web: Nginx server
 include_recipe 'vc-typo3::web-php'          # Web: PHP, PHP-FPM, composer, phpMyAdmin

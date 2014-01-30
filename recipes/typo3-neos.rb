@@ -39,11 +39,11 @@ template settings_yaml do
   not_if "test -f #{settings_yaml}"
 end
 
-execute 'TYPO3 Flow post-installation' do
+execute 'TYPO3 Neos post-installation' do
   cwd vhost_dir
   command "
     sudo ./flow core:setfilepermissions vagrant #{node[:app][:user]} #{node[:app][:group]};
-    sudo chown -R #{node[:app][:user]}:#{node[:app][:group]} #{vhost_dir};
+    sudo chmod -R ug+rw .;
     ./flow cache:warmup;
   "
   user node[:app][:user]

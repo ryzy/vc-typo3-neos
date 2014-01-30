@@ -1,5 +1,5 @@
 # System: extra packages to install initially
-default[:system][:packages] = ['git','mc','htop']
+default[:system][:packages] = ['vim','git','mc','htop','links']
 # Root directory for www data
 default[:system][:www_root] = '/var/www'
 # COMPOSER_HOME set when executing composer
@@ -111,3 +111,19 @@ default['nginx']['default_site_enabled']  = false
 default['nginx']['worker_processes']      = 2
 default['nginx']['realip']['addresses']   = ['0.0.0.0/32']
 default['nginx']['client_max_body_size'] = '99M'
+
+
+
+#
+# RVM
+#
+default['rvm']['default_ruby']      = 'ruby-2.0.0-p353'
+default['rvm']['user_default_ruby'] = node['rvm']['default_ruby']
+
+default['rvm']['vagrant']['system_chef_client'] = '/opt/chef/bin/chef-client'
+default['rvm']['vagrant']['system_chef_solo'] = '/opt/chef/bin/chef-solo'
+default['rvm']['global_gems'] = [
+  { 'name'    => 'sass',      'version' => '3.3.0.rc.2'     },
+  { 'name'    => 'compass',   'version' => '1.0.0.alpha.17' }
+]
+#default['rvm']['user_gems'] = node['rvm']['global_gems']
