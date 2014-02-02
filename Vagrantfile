@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   config.ssh.username = 'vagrant'
   config.vm.boot_timeout = 120
   
-  config.vm.hostname = "vc-typo3"
+  config.vm.hostname = "vc-typo3-neos"
   
   # Default box for Virtualbox provider
  config.vm.box = "opscode-centos-6.5"
@@ -29,8 +29,8 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.provider :digital_ocean do |doc, override|
-    doc.client_id = 'xxxx'
-    doc.api_key = 'xxxx'
+    doc.client_id = ENV['DIGITAL_OCEAN_CLIENT_ID']
+    doc.api_key = ENV['DIGITAL_OCEAN_API_KEY']
     doc.region = 'Amsterdam 2'
     doc.image = 'CentOS 6.4 x64'
     doc.size = '2GB' # and 2vCPU
@@ -42,7 +42,8 @@ Vagrant.configure("2") do |config|
   
   config.vm.provision :chef_solo do |chef|
     chef.run_list = [
-      "recipe[vc-typo3::default]"
+      'recipe[lemp-server::default]',
+      'recipe[typo3-neos::default]'
     ]
   end
 end

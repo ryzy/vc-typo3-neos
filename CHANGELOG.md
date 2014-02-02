@@ -1,3 +1,9 @@
+## 2.0.0 (2014-02-02)
+
+- Breaking changes: project split into two cookbooks: **[lemp-server](https://github.com/ryzy/vc-lemp-server)** and **typo3-neos**
+
+  All LEMP (Linux, Nginx, MySQL, PHP) related stuff moved to independent **lemp-server** cookbook (so it's easy to create other dedicated environment based on it). Therefore **typo3-neos** depends on it (see metadata.rb where the dependency is specified).
+
 ## 1.3.0 (2014-01-30)
 
 Features:

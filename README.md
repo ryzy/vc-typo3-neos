@@ -1,70 +1,80 @@
-# TYPO3 Neos with Vagrant
+# TYPO3 Neos with Vagrant/Chef
 
 Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisioning.
 
-##### Features
+#### Features
 
 To make sure this VM setup suits TYPO3 Flow/Neos development, the following are included in the setup:
 
 * machine is CentOS 6.5 based
+
 * Vagrant provisioning is done by [Chef](http://www.getchef.com/chef/)(solo) + [Berkshelf](http://berkshelf.com/)
-* Web environment installed/configured:
+
+* Vagrant configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) providers
+
+* LEMP stack (Linux/Nginx/MySQL/PHP) environment installed/configured using [ryzy/vc-lemp-server](https://github.com/ryzy/vc-lemp-server) cookbook:
   * MySQL 5.5 (+tuning)
   * Nginx (latest 1.4.x)
   * PHP (latest 5.5.x)
   * phpMyAdmin installed
-* TYPO3 Flow installed (into /var/www/flow.local)
-* TYPO3 Neos pre-installed (into /var/www/neos.local)
-* Configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f)
-
+	
+* TYPO3 Neos installed (into /var/www/neos)
+	* vhosts `neos`, `neos.dev` and `neos.test` available (configured with FLOW_CONTEXT set to Production, Development, Testing respectively)
+	* user `admin` with password `password` already added to TYPO3 Neos
+	
 ## Requirements
 
 1. Install [Vagrant](http://www.vagrantup.com/)
-2. Install [VirtualBox](https://www.virtualbox.org/)
-3. Make sure you have Ruby 1.9.x or 2.x.
-  Note: you might follow this article on [how to install different version of Ruby using RVM](http://misheska.com/blog/2013/06/16/using-rvm-to-manage-multiple-versions-of-ruby/)).
+2. Depends on your chosen Vagrant provider: install VirtualBox **OR** Parallels Desktop **OR** set up an account on [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f)
+3. Make sure you have Ruby 1.9.x or 2.x installed.
 4. Make sure you have Ruby Bundler installed:
   ```[sudo] gem install bundler```
 
 ## Usage
 
-First you need to install required gems (specified in Gemfile) and vagrant plugins:
+* **Install** required gems (specified in Gemfile) and vagrant plugins:
 
-```bash
-bundle install
-vagrant plugin install vagrant-vbguest
-vagrant plugin install vagrant-berkshelf
-vagrant plugin install vagrant-omnibus
-```
+  ```bash
+  bundle install
+  vagrant plugin install vagrant-berkshelf
+  vagrant plugin install vagrant-omnibus
+  ```
 
-Later on simply use:
-```bash
-vagrant up
-```
-If vagrant up fails and it's due to some temporary reason, try 'vagrant provision' after machine was booted. Or file a ticket / pull request so it can be resolved permanently in the future version.
+  * If you're using VirtualBox provider, also install [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) plugin:
+    ```
+    vagrant plugin install vagrant-vbguest
+    ```
 
-**Go to [192.168.66.6](http://192.168.66.6/)** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin (user:root, password:password)
+* **Run** `vagrant up` to kick off your machine:
+  ```bash
+  vagrant up
+  # or, if you want to use provider different than VirtualBox:
+  vagrant up --provider=CHOSEN_PROVIDER
+  ```
 
-Map **flow.local**, **neos.local** to your `hosts` file:
-```bash
-192.168.66.6 flow.local neos.local
-```
-**Go to [flow.local](http://flow.local/)** to see TYPO3 Flow page.
-**Go to [neos.local](http://neos.local/)** to see TYPO3 Neos page (or [neos.local/setup](http://neos.local/setup) to kick off installation process).
+  Sometimes `vagrant up` **fails due to temporary reasons** - just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to do reboot and then re-provision).
 
-And start happy coding!
+* **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin.
+  * Note: if you're not sure about the VM IP address, just log in there using `vagrant ssh` and run `ifconfig`. 
 
-You'll probably download/upload files via SFTP, mapping your local project paths to the remote paths. Optionally you might mount whole `/var/www` to your local filesystem - then read the point below.
+* **Map `neos`, `neos.dev`, `neos.test` in your `hosts` file** to your VM_IP_ADDRESS address, e.g.
+  ```bash
+  192.168.66.6 neos neos.dev neos.test
+  ```
 
-#### Users / Passwords, security
+* **Go to [neos.dev](http://neos.dev/)** to see TYPO3 Neos page.
+
+* **Start happy coding!**
+
+  * You'll probably download/upload files via SFTP, mapping your local project paths to the remote paths. Optionally you might mount whole `/var/www` to your local filesystem - then read the point below **Mount VM's `/var/www` to your filesystem**.
+
+### Users / Passwords, security
 
 All passwords (apart of the `root`) are defined in attributes/default.rb:
 
 * **ssh:** user: root, passw: `vagrant`
 * **ssh:** user: vagrant, passw: `vagrant`
 * **mysql:** user: root, passw: `password`
-* **mysql:** user: typo3, passw: `password`
-  * database name(s): `typo3_neos`, `typo3_flow`, `typo3_cms`
 
 You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
