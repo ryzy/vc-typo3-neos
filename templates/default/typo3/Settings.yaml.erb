@@ -4,7 +4,7 @@ TYPO3:
     persistence:
       backendOptions:
         driver: pdo_mysql
-        dbname: <%= @db_name %>
-        user: <%= @db_user %>
-        password: <%= @db_pass %>
-        host: <%= @db_host %>
+        dbname: <%= @db['name'] %>
+        user: <%= @db['user'] %>
+        password: <%= @db['pass'] %>
+        host: <%= @db['host'] %>
