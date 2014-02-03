@@ -23,7 +23,7 @@ server {
   
   location ~ \.php$ {
     include         fastcgi_params;
-    fastcgi_param   FLOW_CONTEXT        Development; # Development|Production
+    fastcgi_param   FLOW_CONTEXT        $context; # Development|Production
     fastcgi_param   FLOW_REWRITEURLS    1;
     fastcgi_pass    upstream-php;
   }
