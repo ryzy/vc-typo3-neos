@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
     override.ssh.pty              = true
   end
   
-  config.omnibus.chef_version = :latest
+  config.omnibus.chef_version = '11.8.0'
   config.berkshelf.enabled = true
   
   config.vm.provision :chef_solo do |chef|
