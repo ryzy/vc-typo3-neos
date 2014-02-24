@@ -1,16 +1,46 @@
 ---
 driver:
   name: vagrant
+driver_config:
+  require_chef_omnibus: true
+  use_vagrant_berkshelf_plugin: true
 
 provisioner:
   name: chef_solo
 
 platforms:
-  - name: ubuntu-12.04
-  - name: centos-6.4
+# Local Vagrant platform
+- name: centos-vagrant
+  driver:
+    provider: parallels
+    box: centos-6.5-x86_64-minimal
+    customize:
+      memsize: 1024
+      cpus: 2
+
+# DigitalOcean platform
+# see https://github.com/test-kitchen/kitchen-digitalocean/blob/master/data/digitalocean.json
+- name: centos-do
+  driver_plugin: digitalocean
+  driver_config:
+    digitalocean_client_id: <%= ENV['DIGITAL_OCEAN_CLIENT_ID'] %>
+    digitalocean_api_key: <%= ENV['DIGITAL_OCEAN_API_KEY'] %>
+    ssh_key_ids: <%= ENV['DIGITAL_OCEAN_SSH_KEY_IDS'] %>
+    image_id: 1646467 # CentOS 6.5 x64
+    flavor_id: 62     # 2GB, 2vCPU
+    region_id: 5      # Ams2
+    
+# Rackspace platform
+- name: centos-rs
+  driver_plugin: rackspace
+  driver_config:
+    rackspace_username: <%= ENV['RACKSPACE_CLIENT_ID'] %>
+    rackspace_api_key: <%= ENV['RACKSPACE_API_KEY'] %>
+    rackspace_region: lon
+    image_id: 'f70ed7c7-b42e-4d77-83d8-40fa29825b85' # CentOS 6.5
+    flavor_id: 'performance1-2' # 2GB, 2vCPU
 
 suites:
   - name: default
-    run_list:
-      - recipe[vc-typo3::default]
-    attributes:
+    run_list: [ 'recipe[lemp-server]', 'recipe[typo3-neos]' ]
+    attributes: {}

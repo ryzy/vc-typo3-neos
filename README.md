@@ -8,15 +8,15 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
 
 * machine is CentOS 6.5 based
 
-* Vagrant provisioning is done by [Chef](http://www.getchef.com/chef/)(solo) + [Berkshelf](http://berkshelf.com/)
+* Vagrant provisioning is done by [Chef](http://www.getchef.com/chef/) + [Berkshelf](http://berkshelf.com/). Tested by [kitchen.ci](http://kitchen.ci/)
 
-* Vagrant configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) providers
+* Vagrant configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) / Rackspace providers. Same with kitchen.ci test.
 
 * LEMP stack (Linux/Nginx/MySQL/PHP) environment installed/configured using [ryzy/vc-lemp-server](https://github.com/ryzy/vc-lemp-server) cookbook:
   * MySQL 5.5 (+tuning)
   * Nginx (latest 1.4.x)
   * PHP (latest 5.5.x)
-  * phpMyAdmin installed
+  * phpMyAdmin, opcache GUI installed
 	
 * TYPO3 Neos installed (into /var/www/neos)
 	* vhosts `neos`, `neos.dev` and `neos.test` available (configured with FLOW_CONTEXT set to Production, Development, Testing respectively)
@@ -25,7 +25,7 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
 ## Requirements
 
 1. Install [Vagrant](http://www.vagrantup.com/)
-2. Depends on your chosen Vagrant provider: install VirtualBox **OR** Parallels Desktop **OR** set up an account on [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f)
+2. Depends on your chosen Vagrant provider: install VirtualBox **OR** Parallels Desktop **OR** set up an account on [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) / Rackspace
 3. Make sure you have Ruby 1.9.x or 2.x installed.
 4. Make sure you have Ruby Bundler installed:
   ```[sudo] gem install bundler```
@@ -52,14 +52,14 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
   vagrant up --provider=CHOSEN_PROVIDER
   ```
 
-  Sometimes `vagrant up` **fails due to temporary reasons** - just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to do reboot and then re-provision).
+  It might happen that `vagrant up` **fails and it's usually due to temporary reasons**. Just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to do reboot and then re-provision).
 
 * **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin.
   * Note: if you're not sure about the VM IP address, just log in there using `vagrant ssh` and run `ifconfig`. 
 
 * **Map `neos`, `neos.dev`, `neos.test` in your `hosts` file** to your VM_IP_ADDRESS address, e.g.
   ```bash
-  192.168.66.6 neos neos.dev neos.test
+  1.2.3.4 neos neos.dev neos.test
   ```
 
 * **Go to [neos.dev](http://neos.dev/)** to see TYPO3 Neos page.
@@ -75,6 +75,7 @@ All passwords (apart of the `root`) are defined in attributes/default.rb:
 * **ssh:** user: root, passw: `vagrant`
 * **ssh:** user: vagrant, passw: `vagrant`
 * **mysql:** user: root, passw: `password`
+* **typo3:** user: admin, passsw: `password`
 
 You can connect to MySQL from outside VM machine as user _root_ is added with '%' host. And there's no iptables running, so no firewall setup.
 
@@ -116,16 +117,6 @@ Detailed instruction and config options are available on [vagrant-digitalocean](
 	```
 
 ## Tips & Tricks
-
-#### Mount VM's `/var/www` to your filesystem
-
-The web root folder to all Nginx vhosts is `/var/www` and it's exported via NFS, ready to mount to your filesystem. You can mount it using:
-```
-sudo mount_nfs -o async,udp,vers=3,resvport,intr,rsize=32768,wsize=32768,soft 192.168.66.6:/var/www /Volumes/vc-typo3-var-www
-```
-Or simply run `./mount-vm.sh`
-
-Ergo you mount VM's filesystem to your host machine - not the other way, like when using Vagrant's `synced_folder` directive. **It gives you much better performance** even if you'd use it with `type:'nfs'` option. Quick tests with `ab` for default TYPO3 Neos installation for its home page show ca. 300% difference (in comparison to synced\_folder with type:'nfs'). It makes huge difference when working with TYPO3 in FLOW_CONTEXT=Development, with uncached requests (i.e. 300..1000ms instead of 1000..3000ms).
 
 #### Change default provider
 

@@ -1,3 +1,10 @@
+## 2.1.0 (2014-02-24)
+
+- more tunable options for TYPO3 Neos - see attributes/default.rb
+- lemp-server v0.3.0
+- RVM dependency removed (lemp-server now uses simplistic chruby+ruby-build)
+- nfs service, mount-vm.sh removed (due to vagrant 1.5 comming, @see lemp-server changelog)
+
 ## 2.0.0 (2014-02-02)
 
 - Breaking changes: project split into two cookbooks: **[lemp-server](https://github.com/ryzy/vc-lemp-server)** and **typo3-neos**
