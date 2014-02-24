@@ -1,5 +1,5 @@
-vhost_name = node['app']['neos']['vhost_base_name']
-vhost_dir = "#{node['system']['www_root']}/#{vhost_name}"
+vhost_name = node['app']['neos']['vhost_base_name'] # e.g. neos
+vhost_dir = "#{node['system']['www_root']}/#{vhost_name}" # e.g. /var/www/neos
 
 service 'nginx' do
   action :nothing
@@ -10,7 +10,9 @@ template "#{node['nginx']['dir']}/include-neos-rewrites.conf" do
   source 'nginx/include-neos-rewrites.erb'
 end
 
+#
 # Neos vhost
+#
 template "#{node['nginx']['dir']}/sites-available/#{vhost_name}" do
   source 'nginx/site-neos.erb'
   variables({
@@ -20,7 +22,15 @@ template "#{node['nginx']['dir']}/sites-available/#{vhost_name}" do
 end
 nginx_site vhost_name
 
+# also add neos hosts to /etc/hosts file, so you can connect to them from localhost
+execute "echo #{node['ipaddress']} #{vhost_name} #{vhost_name}.dev #{vhost_name}.test >> /etc/hosts" do
+  not_if "cat /etc/hosts | grep #{vhost_name}.test"
+end
+
+
+#
 # Neos db
+#
 mysql_database node['app']['neos']['db']['name'] do
   connection    node['app']['mysql_connection_info']
   action :create
@@ -56,6 +66,7 @@ execute "composer install --dev --no-interaction --no-progress" do
   not_if "test -f #{vhost_dir}/composer.lock"
 end
 
+
 # prepare Settings.yaml with database connection info
 settings_yaml = "#{vhost_dir}/Configuration/Settings.yaml"
 template settings_yaml do
@@ -68,26 +79,64 @@ template settings_yaml do
   not_if "test -f #{settings_yaml}"
 end
 
-# Neos post-installation stuff
+#
+# Neos: file permissions
+#
 execute 'TYPO3 Neos post-installation: file permissions' do
   cwd vhost_dir
   command "
-    ./flow core:setfilepermissions vagrant #{node[:app][:user]} #{node[:app][:group]};
-    chown -R vagrant:#{node[:app][:group]} .;
+    ./flow core:setfilepermissions #{node[:app][:user]} #{node[:app][:user]} #{node[:app][:group]};
     chmod -R ug+rw .;
   "
 end
 
-execute 'TYPO3 Neos post-installation: site import, creating user etc...' do
+
+#
+# flow doctrine:migrate
+#
+mysql_cmd = "mysql -u#{node['app']['neos']['db']['user']} -p#{node['app']['neos']['db']['pass']} #{node['app']['neos']['db']['name']} -sN"
+
+execute 'TYPO3 Neos post-installation: flow doctrine:migrate' do
+  cwd vhost_dir
+  command './flow doctrine:migrate'
+  user node['app']['user']
+  group node['app']['group']
+  not_if "#{mysql_cmd} -e 'SHOW TABLES' | grep migrationstatus"
+end if node['app']['neos']['install']['migrate_doctrine'] # only if migrate_doctrine flag is set
+
+#
+# flow user:create, create 1st admin user
+#
+ud = node['app']['neos']['install']['create_admin_user']
+# create admin user with provided data
+execute 'TYPO3 Neos post-installation: flow user:create' do
+  cwd vhost_dir
+  command "./flow user:create --roles Administrator #{ud['username']} #{ud['password']} #{ud['first_last_name']}"
+  user node['app']['user']
+  group node['app']['group']
+  only_if "#{mysql_cmd} -e 'SELECT COUNT(*) FROM typo3_flow_security_account' | grep ^0" # only run if Neos account table is empty (COUNT() returns 0)
+end if ud.is_a?(Hash) && ud.length
+
+#
+# flow site:import, import default site
+#
+execute 'TYPO3 Neos post-installation: flow site:import' do
+  cwd vhost_dir
+  command "./flow site:import --packageKey #{node['app']['neos']['install']['site_package_key']}"
+  user node['app']['user']
+  group node['app']['group']
+  only_if "#{mysql_cmd} -e 'SELECT COUNT(*) FROM typo3_neos_domain_model_site' | grep ^0" # only run if Neos sites table is empty (COUNT() returns 0)
+end if node['app']['neos']['install']['site_package_key'] # only if site package key is provided
+
+#
+# flow: cache:warmup
+#
+execute 'TYPO3 Neos post-installation: cache:warmup' do
   cwd vhost_dir
   command "
-    ./flow doctrine:migrate;
-    ./flow site:import --packageKey TYPO3.NeosDemoTypo3Org;
-    ./flow cache:warmup;
-    ./flow user:create --roles Administrator admin password Admin User;
+    FLOW_CONTEXT=Production  ./flow cache:warmup;
+    FLOW_CONTEXT=Development ./flow cache:warmup;
   "
   user node['app']['user']
   group node['app']['group']
-  # if PackageStates.php is present, we can be pretty sure Neos has been already provisioned
-  not_if "test -f #{vhost_dir}/Configuration/PackageStates.php" 
 end

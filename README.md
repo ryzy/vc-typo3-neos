@@ -81,7 +81,7 @@ You can connect to MySQL from outside VM machine as user _root_ is added with '%
 
 ## Provider: Parallels Desktop
 
-Why bother, if VirtualBox is so cool, free and there's plenty of ready to use image boxes? Well, look up some [benchmarks](http://www.macobserver.com/tmo/article/benchmarking-parallels-fusion-and-virtualbox-against-boot-camp) - I'm sure you'll appreciate 3-digit % difference in performance (e.g. during my tests on the same machine, Neos back-end loaded in 800..1000ms (VB) vs 300..500ms (PD9). Values for Development environment).
+Why bother, if VirtualBox is so cool, free and there's plenty of ready to use image boxes? Well, look up [some](http://mitchellh.com/comparing-filesystem-performance-in-virtual-machines) [benchmarks](http://www.macobserver.com/tmo/article/benchmarking-parallels-fusion-and-virtualbox-against-boot-camp) - I'm sure you'll appreciate 3-digit % difference in Neos performance. E.g. during the tests on the same machine, Neos back-end loaded in 800..1000ms for VB, vs 300..500ms for PD9 (values for Development context).
 
 #### Usage
 
