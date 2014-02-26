@@ -1,4 +1,6 @@
-vhost_name = node['app']['neos']['vhost_base_name'] # e.g. neos
+neos_data = node['app']['neos']
+
+vhost_name = neos_data['vhost_base_name'] # e.g. neos
 vhost_dir = "#{node['system']['www_root']}/#{vhost_name}" # e.g. /var/www/neos
 
 service 'nginx' do
@@ -15,6 +17,7 @@ end
 #
 template "#{node['nginx']['dir']}/sites-available/#{vhost_name}" do
   source 'nginx/site-neos.erb'
+  cookbook 'typo3-neos'
   variables({
       :vhost_name => vhost_name
   })
@@ -31,14 +34,14 @@ end
 #
 # Neos db
 #
-mysql_database node['app']['neos']['db']['name'] do
+mysql_database neos_data['db']['name'] do
   connection    node['app']['mysql_connection_info']
   action :create
 end
-mysql_database_user node['app']['neos']['db']['user'] do
+mysql_database_user neos_data['db']['user'] do
   connection    node['app']['mysql_connection_info']
-  password      node['app']['neos']['db']['pass']
-  database_name "#{node['app']['neos']['db']['name']}"
+  password      neos_data['db']['pass']
+  database_name neos_data['db']['name']
   host          '%'
   privileges    [:all]
   action        :grant
@@ -71,8 +74,9 @@ end
 settings_yaml = "#{vhost_dir}/Configuration/Settings.yaml"
 template settings_yaml do
   source 'typo3/Settings.yaml.erb'
+  cookbook 'typo3-neos'
   variables({
-      :db => node['app']['neos']['db']
+      :db => neos_data['db']
   })
   user node['app']['user']
   group node['app']['group']
@@ -94,7 +98,7 @@ end
 #
 # flow doctrine:migrate
 #
-mysql_cmd = "mysql -u#{node['app']['neos']['db']['user']} -p#{node['app']['neos']['db']['pass']} #{node['app']['neos']['db']['name']} -sN"
+mysql_cmd = "mysql -u#{neos_data['db']['user']} -p#{neos_data['db']['pass']} #{neos_data['db']['name']} -sN"
 
 execute 'TYPO3 Neos post-installation: flow doctrine:migrate' do
   cwd vhost_dir
@@ -102,12 +106,12 @@ execute 'TYPO3 Neos post-installation: flow doctrine:migrate' do
   user node['app']['user']
   group node['app']['group']
   not_if "#{mysql_cmd} -e 'SHOW TABLES' | grep migrationstatus"
-end if node['app']['neos']['install']['migrate_doctrine'] # only if migrate_doctrine flag is set
+end if neos_data['install']['migrate_doctrine'] # only if migrate_doctrine flag is set
 
 #
 # flow user:create, create 1st admin user
 #
-ud = node['app']['neos']['install']['create_admin_user']
+ud = neos_data['install']['create_admin_user']
 # create admin user with provided data
 execute 'TYPO3 Neos post-installation: flow user:create' do
   cwd vhost_dir
@@ -122,11 +126,11 @@ end if ud.is_a?(Hash) && ud.length
 #
 execute 'TYPO3 Neos post-installation: flow site:import' do
   cwd vhost_dir
-  command "./flow site:import --packageKey #{node['app']['neos']['install']['site_package_key']}"
+  command "./flow site:import --packageKey #{neos_data['install']['site_package_key']}"
   user node['app']['user']
   group node['app']['group']
   only_if "#{mysql_cmd} -e 'SELECT COUNT(*) FROM typo3_neos_domain_model_site' | grep ^0" # only run if Neos sites table is empty (COUNT() returns 0)
-end if node['app']['neos']['install']['site_package_key'] # only if site package key is provided
+end if neos_data['install']['site_package_key'] # only if site package key is provided
 
 #
 # flow: cache:warmup

@@ -58,8 +58,8 @@ Vagrant.configure("2") do |config|
   
   config.vm.provision :chef_solo do |chef|
     chef.run_list = [
-      'recipe[lemp-server::default]',
-      'recipe[typo3-neos::default]'
+      'recipe[lemp-server]',
+      'recipe[typo3-neos]'
     ]
   end
 end

@@ -6,27 +6,27 @@ Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisionin
 
 To make sure this VM setup suits TYPO3 Flow/Neos development, the following are included in the setup:
 
-* machine is CentOS 6.5 based
+* machine CentOS 6.5 based
 
-* Vagrant provisioning is done by [Chef](http://www.getchef.com/chef/) + [Berkshelf](http://berkshelf.com/). Tested by [kitchen.ci](http://kitchen.ci/)
+* Vagrant provisioning done by [Chef](http://www.getchef.com/chef/) + [Berkshelf](http://berkshelf.com/). Tested by [kitchen.ci](http://kitchen.ci/)
 
-* Vagrant configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) / Rackspace providers. Same with kitchen.ci test.
+* Vagrant configuration for VirtualBox / Parallels Desktop / [DigitalOcean.com](https://www.digitalocean.com/) / [Rackspace](http://www.rackspace.co.uk/) providers. Same with kitchen.ci tests.
 
-* LEMP stack (Linux/Nginx/MySQL/PHP) environment installed/configured using [ryzy/vc-lemp-server](https://github.com/ryzy/vc-lemp-server) cookbook:
+* LEMP stack (Linux/Nginx/MySQL/PHP) environment installed/configured using parent [ryzy/vc-lemp-server](https://github.com/ryzy/vc-lemp-server) cookbook:
   * MySQL 5.5 (+tuning)
   * Nginx (latest 1.4.x)
   * PHP (latest 5.5.x)
-  * phpMyAdmin, opcache GUI installed
-	
+  * phpMyAdmin, [OpCacheGUI](https://github.com/PeeHaa/OpCacheGUI) installed
+
 * TYPO3 Neos installed (into /var/www/neos)
 	* vhosts `neos`, `neos.dev` and `neos.test` available (configured with FLOW_CONTEXT set to Production, Development, Testing respectively)
 	* user `admin` with password `password` already added to TYPO3 Neos
-	
+
 ## Requirements
 
 1. Install [Vagrant](http://www.vagrantup.com/)
-2. Depends on your chosen Vagrant provider: install VirtualBox **OR** Parallels Desktop **OR** set up an account on [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f) / Rackspace
-3. Make sure you have Ruby 1.9.x or 2.x installed.
+2. Depends on your chosen Vagrant provider: install VirtualBox **OR** Parallels Desktop **OR** set up an account on [DigitalOcean.com](https://www.digitalocean.com/) / [Rackspace](http://www.rackspace.co.uk/)
+3. Make sure you have Ruby 2.x installed.
 4. Make sure you have Ruby Bundler installed:
   ```[sudo] gem install bundler```
 
@@ -40,7 +40,7 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
   vagrant plugin install vagrant-omnibus
   ```
 
-  * If you're using VirtualBox provider, also install [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) plugin:
+  * (Optional) If you're using VirtualBox provider, also install [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) plugin:
     ```
     vagrant plugin install vagrant-vbguest
     ```
@@ -52,9 +52,9 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
   vagrant up --provider=CHOSEN_PROVIDER
   ```
 
-  It might happen that `vagrant up` **fails and it's usually due to temporary reasons**. Just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to do reboot and then re-provision).
+  It might happen that `vagrant up` **fails due to temporary reasons**. Just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to reboot and then re-provision VM).
 
-* **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin.
+* **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin, OpCacheGUI.
   * Note: if you're not sure about the VM IP address, just log in there using `vagrant ssh` and run `ifconfig`. 
 
 * **Map `neos`, `neos.dev`, `neos.test` in your `hosts` file** to your VM_IP_ADDRESS address, e.g.
@@ -66,14 +66,14 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
 
 * **Start happy coding!**
 
-  * You'll probably download/upload files via SFTP, mapping your local project paths to the remote paths. Optionally you might mount whole `/var/www` to your local filesystem - then read the point below **Mount VM's `/var/www` to your filesystem**.
+  * You'll probably download/upload files via SFTP, mapping your local project paths to the remote paths.
 
 ### Users / Passwords, security
 
 All passwords (apart of the `root`) are defined in attributes/default.rb:
 
-* **ssh:** user: root, passw: `vagrant`
-* **ssh:** user: vagrant, passw: `vagrant`
+* **ssh:** user: root, passw: `vagrant` (or: your private SSH key in case of DigitalOcean, Rackspace providers)
+* **ssh:** user: vagrant, passw: `vagrant` (or: same as above)
 * **mysql:** user: root, passw: `password`
 * **typo3:** user: admin, passsw: `password`
 
@@ -95,9 +95,7 @@ Why bother, if VirtualBox is so cool, free and there's plenty of ready to use im
 
 ## Provider: DigitalOcean
 
-This part describes how to deploy this setup to [DigitalOcean.com](https://www.digitalocean.com/?refcode=58af8bab822f). After `vagrant up --provider=digital_ocean` you'll have up & running droplet there, provisioned and ready to use, as you'd have it locally.
-
-Detailed instruction and config options are available on [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean) plugin page. Below is the short version.
+DigitalOcean configuration is already included in Vagrantfile. After `vagrant up --provider=digital_ocean` you'll have up & running droplet there, provisioned and ready to use, as you'd have it locally.
 
 #### Usage
 
@@ -115,6 +113,19 @@ Detailed instruction and config options are available on [vagrant-digitalocean](
 	vagrant plugin install vagrant-digitalocean
 	vagrant up --provider=digital_ocean
 	```
+
+More detailed instruction and config options available on [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean) plugin page.
+
+## Provider: Rackspace
+
+Rackspace configuration is already included in Vagrantfile. After `vagrant up --provider=rackspace` you'll have up & running droplet there, provisioned and ready to use, as you'd have it locally.
+
+You'll need to install [vagrant-rackspace](https://github.com/mitchellh/vagrant-rackspace) plugin:
+
+```vagrant plugin install vagrant-rackspace```
+
+More detailed instruction and config options available on [vagrant-rackspace](https://github.com/mitchellh/vagrant-rackspace) plugin page.
+
 
 ## Tips & Tricks
 
