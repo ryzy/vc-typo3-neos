@@ -1,3 +1,7 @@
+## 2.1.1 (2014-03-23)
+
+- [BUGFIX] Temporary fix for Chef::Exceptions::RedirectLimitExceeded while installing chruby
+
 ## 2.1.0 (2014-02-24)
 
 - more tunable options for TYPO3 Neos - see attributes/default.rb
