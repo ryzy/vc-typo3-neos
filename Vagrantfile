@@ -1,3 +1,4 @@
+Vagrant.require_version ">= 1.4.3", "< 1.5.0"
 Vagrant.require_plugin "vagrant-berkshelf"
 Vagrant.require_plugin "vagrant-omnibus"
 
