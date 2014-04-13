@@ -1,3 +1,8 @@
+## 2.1.2 (2014-04-13)
+
+- lemp-server dependency: bumped to 0.4.0
+- composer create-project: new options (in attributes) to specify which version of Neos to install
+
 ## 2.1.1 (2014-03-23)
 
 - [BUGFIX] Temporary fix for Chef::Exceptions::RedirectLimitExceeded while installing chruby
