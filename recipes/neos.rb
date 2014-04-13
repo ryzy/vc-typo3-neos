@@ -50,19 +50,8 @@ end
 #
 # Install TYPO3 Neos
 #
-
-# clone git repo
-git vhost_dir do
-  repository 'git://git.typo3.org/Neos/Distributions/Base.git'
-  reference 'master'
-  user node['app']['user']
-  group node['app']['group']
-  action :sync
-end
-
-# execute composer install
-execute "composer install --dev --no-interaction --no-progress" do
-  cwd vhost_dir
+execute "composer create-project --dev --no-interaction --no-progress typo3/neos-base-distribution #{vhost_name} #{neos_data['install']['version']}" do
+  cwd node['system']['www_root']
   user node['app']['user']
   group node['app']['group']
   environment (node['system']['composer_env'])
