@@ -6,17 +6,17 @@ server {
   
   set $context 'Production';
   if ($host ~ test) {
-		set $context 'Testing';
+    set $context 'Testing';
   }
-	if ($host ~ dev) {
-		set $context 'Development';
-	}
-	
-	access_log      <%= node['nginx']['log_dir'] %>/<%= @vhost_name %>-$context.access.log;
+  if ($host ~ dev) {
+    set $context 'Development';
+  }
+  
+  access_log      <%= node['nginx']['log_dir'] %>/<%= @vhost_name %>-$context.access.log;
   error_log       <%= node['nginx']['log_dir'] %>/<%= @vhost_name %>.error.log;
-	
-	include include-neos-rewrites.conf;
-	
+  
+  include include-neos-rewrites.conf;
+  
   location / {
     try_files $uri /index.php?$args;
   }
