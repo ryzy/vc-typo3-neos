@@ -14,7 +14,7 @@ default['app']['neos'] = {
   
   # Neos post-install actions
   'install' => {
-    'version' => nil, # eg: 1.1.0-beta1 (last argument for 'composer create-project' cmd)
+    'version' => '1.1.0-beta2', # eg: 1.1.0-beta1 (last argument for 'composer create-project' cmd)
     # whether to do ./flow doctrine:migrate
     'migrate_doctrine' => true,
     # Neos post-install: package site to import (or false to skip the step)
