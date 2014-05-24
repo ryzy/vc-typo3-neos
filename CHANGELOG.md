@@ -1,3 +1,9 @@
+## 2.2.0 (2014-05-24)
+
+- [IMPROVEMENT] Update to Vagrant 1.6.x (since Berkshelf 3 finally works with it)
+- [IMPROVEMENT] All boxes in Vagrantfile replaced with VagrantCloud locations
+- [IMPROVEMENT] lemp-server dependency version bumped to ~> 0.5.0
+
 ## 2.1.2 (2014-04-13)
 
 - lemp-server dependency: bumped to 0.4.0
