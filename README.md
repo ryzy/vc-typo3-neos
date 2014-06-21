@@ -54,6 +54,13 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
 
   It might happen that `vagrant up` **fails due to temporary reasons**. Just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to reboot and then re-provision VM).
 
+  If you run into the error message
+  `cannot load such file -- hashie/hash_extensions` then you can fix it with this command:
+
+  ```bash
+  vagrant plugin install vagrant-berkshelf --plugin-version '>= 2.0.1'
+  ```
+
 * **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin, OpCacheGUI.
   * Note: if you're not sure about the VM IP address, just log in there using `vagrant ssh` and run `ifconfig`. 
 
