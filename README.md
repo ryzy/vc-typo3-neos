@@ -54,6 +54,17 @@ To make sure this VM setup suits TYPO3 Flow/Neos development, the following are 
 
   It might happen that `vagrant up` **fails due to temporary reasons**. Just try again with `vagrant provision` (to just re-provision the server) or `vagrant reload --provision` (to reboot and then re-provision VM).
 
+  Another reason for failures during `vagrant up` might be the vagrant-berkshelf plugin. Here are some examples of error messages:
+  `Could not open library dep_gecode.bundle`
+  or
+  `cannot load such file -- hashie/hash_extensions`
+
+  It might help then to reinstall vagrant-berkshelf:
+
+  ```bash
+  vagrant plugin install vagrant-berkshelf --plugin-version '>= 2.0.1'
+  ```
+
 * **Go to VM_IP_ADDRESS** to see VM's default vhost. You'll see there phpinfo() and link to phpMyAdmin, OpCacheGUI.
   * Note: if you're not sure about the VM IP address, just log in there using `vagrant ssh` and run `ifconfig`. 
 
