@@ -2,6 +2,12 @@
 
 Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisioning.
 
+## UPDATE
+
+**Nowadays I advocate for running TYPO3 inside Docker containers.** Please have a look at [million12/typo3-neos-abstract](https://github.com/million12/docker-typo3-neos-abstract) and [million12/typo3-neos](https://github.com/million12/docker-typo3-neos) Docker images. This repository is **not** maintained any longer.
+
+---
+
 #### Features
 
 To make sure this VM setup suits TYPO3 Flow/Neos development, the following are included in the setup:
@@ -144,4 +150,8 @@ Add e.g. `export VAGRANT_DEFAULT_PROVIDER=parallels` to your `.bash_profile`
 
 ## Author
 
-Author: ryzy (<marcin@ryzycki.com>)
+Author: ryzy marcin@m12.io
+
+---
+
+**Sponsored by** [Typostrap.io - the new prototyping tool](http://typostrap.io/) for building highly-interactive prototypes of your website or web app. Built on top of TYPO3 Neos CMS and Zurb Foundation framework.
