@@ -2,9 +2,9 @@
 
 Complete environment for TYPO3 Neos using Vagrant + Chef + Berkshelf provisioning.
 
-## UPDATE
+## UPDATE - THIS REPO IS OBSOLETE
 
-**Nowadays I advocate for running TYPO3 inside Docker containers.** Please have a look at [million12/typo3-neos-abstract](https://github.com/million12/docker-typo3-neos-abstract) and [million12/typo3-neos](https://github.com/million12/docker-typo3-neos) Docker images. This repository is **not** maintained any longer.
+**Nowadays I advocate for running TYPO3 inside Docker containers.** Please have a look at [million12/typo3-flow-neos-abstract](https://github.com/million12/docker-typo3-flow-neos-abstract) and [million12/typo3-neos](https://github.com/million12/docker-typo3-neos) Docker images. This repository is **not maintained** any longer.
 
 ---
 
